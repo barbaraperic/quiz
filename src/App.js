@@ -1,11 +1,11 @@
 import './App.css';
 //import Button from './Components/Button'
-import Card from './Components/Card'
+import QuoteMachine from './Components/QuoteMachine'
 
 function App() {
   return (
     <div className="App">
-      <Card />
+      <QuoteMachine />
     </div>
   );
 }
