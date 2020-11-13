@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios'
+import refreshIcon from '../images/refresh.png'
+import './QuoteMachine.css'
 
 const styles = {
   card: {
@@ -66,6 +68,10 @@ class QuoteMachine extends React.Component {
     const { author, quote, genre, allQuotes } = this.state
     return (
       <React.Fragment>
+        <div className="flex-center">
+          <p>refresh</p>
+          <img src={refreshIcon} alt="refresh"/>
+        </div>
         <div style={styles.card}>
           <button
             onClick={this.getAuthorQuotes}
