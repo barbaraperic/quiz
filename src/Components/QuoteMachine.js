@@ -21,6 +21,7 @@ class QuoteMachine extends React.Component {
     this.state = {
       author: '',
       quote: '',
+      genre: ''
       allQuotes: []
     }
     this.handleClick = this.handleClick.bind(this)
