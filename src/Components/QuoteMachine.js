@@ -13,7 +13,6 @@ const styles = {
     padding: '8px 16px'
   }
 }
-
 class QuoteMachine extends React.Component {
   constructor(props) {
     super(props)
@@ -21,7 +20,7 @@ class QuoteMachine extends React.Component {
     this.state = {
       author: '',
       quote: '',
-      genre: ''
+      genre: '',
       allQuotes: []
     }
     this.handleClick = this.handleClick.bind(this)
@@ -32,21 +31,22 @@ class QuoteMachine extends React.Component {
   componentDidMount() {
     this.getQuote()
   }
-  //use axios
+
   getQuote() {
     let url = ('https://quote-garden.herokuapp.com/api/v2/quotes/random')
     axios.get(url)
     .then(res => {
-      console.log(res.data.quote)
       this.setState({ 
         author: res.data.quote.quoteAuthor,
-        quote: res.data.quote.quoteText
+        quote: res.data.quote.quoteText,
+        genre: res.data.quote.quoteGenre
       })
     })
   }
 
   handleClick() {
     this.getQuote()
+    this.setState({ allQuotes: []})
   }
 
   getAuthorQuotes(author) {
@@ -54,8 +54,7 @@ class QuoteMachine extends React.Component {
     let url = `https://quote-garden.herokuapp.com/api/v2/authors/${authorName}?page=1&limit=10`
     
     axios.get(url).then(res => {
-      //console.log(res)
-      let quotes = res.data.quotes // array of objects
+      let quotes = res.data.quotes //array of objects
 
       this.setState({ allQuotes: quotes}, () => {
         console.log('all', this.state.allQuotes)
@@ -64,7 +63,7 @@ class QuoteMachine extends React.Component {
   }
 
   render() {
-    const { author, quote, allQuotes } = this.state
+    const { author, quote, genre, allQuotes } = this.state
     return (
       <React.Fragment>
         <div style={styles.card}>
@@ -74,16 +73,23 @@ class QuoteMachine extends React.Component {
           >
             {author}
           </button>
+          <p>-{genre}-</p>
           <p>{quote}</p>
           <button
             onClick={this.handleClick}
           >Get new quote</button>
         </div>
         <ul>
-          {allQuotes.map(quote => {
-            return <li className="list">{quote.quoteText}</li>
+          {allQuotes.map((quote, i) => {
+            return (
+            <li 
+              className="list"
+              key={i}
+            >
+                {quote.quoteText}
+            </li>
+            )
           })}
-
         </ul>
       </React.Fragment>
     )
