@@ -36,6 +36,7 @@ class QuoteMachine extends React.Component {
     let url = ('https://quote-garden.herokuapp.com/api/v2/quotes/random')
     axios.get(url)
     .then(res => {
+      console.log(res.data.quote)
       this.setState({ 
         author: res.data.quote.quoteAuthor,
         quote: res.data.quote.quoteText
