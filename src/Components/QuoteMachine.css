@@ -1,5 +1,18 @@
+html, body{
+  font-family: 'Xanh Mono', monospace;
+
+}
+
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.refresh-icon {
+  cursor: pointer;
+}
+
+.text-center {
+  margin: 16px auto;
 }

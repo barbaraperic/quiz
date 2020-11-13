@@ -67,23 +67,27 @@ class QuoteMachine extends React.Component {
   render() {
     const { author, quote, genre, allQuotes } = this.state
     return (
-      <React.Fragment>
+      <div className="text-center">
         <div className="flex-center">
           <p>refresh</p>
-          <img src={refreshIcon} alt="refresh"/>
+          <img 
+            src={refreshIcon} 
+            alt="refresh" 
+            onClick={this.handleClick}
+            className="refresh-icon"
+          />
         </div>
-        <div style={styles.card}>
-          <button
+        <div className="quote-card">
+          <p>{quote}</p>
+        </div>
+        <div>
+          <h2
             onClick={this.getAuthorQuotes}
             value={author}
           >
             {author}
-          </button>
-          <p>-{genre}-</p>
-          <p>{quote}</p>
-          <button
-            onClick={this.handleClick}
-          >Get new quote</button>
+          </h2>
+          <p>{genre}</p>
         </div>
         <ul>
           {allQuotes.map((quote, i) => {
@@ -97,7 +101,7 @@ class QuoteMachine extends React.Component {
             )
           })}
         </ul>
-      </React.Fragment>
+      </div>
     )
   }
 }
