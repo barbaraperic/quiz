@@ -79,7 +79,7 @@ class QuoteMachine extends React.Component {
         </div>
         <ul>
           {allQuotes.map(quote => {
-            return <li>{quote.quoteText}</li>
+            return <li className="list">{quote.quoteText}</li>
           })}
 
         </ul>
