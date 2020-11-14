@@ -16,3 +16,21 @@ html, body{
 .text-center {
   margin: 16px auto;
 }
+
+.header {
+  border: none;
+  background-color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+ul > li {
+  list-style-type: none;
+  margin: 16px;
+  text-align: left;
+}
+
+.quote {
+  margin: 16px;
+  text-align: left;
+}

@@ -23,7 +23,8 @@ class QuoteMachine extends React.Component {
       author: '',
       quote: '',
       genre: '',
-      allQuotes: []
+      allQuotes: [],
+      loading: false
     }
     this.handleClick = this.handleClick.bind(this)
     this.getQuote = this.getQuote.bind(this)
@@ -58,14 +59,12 @@ class QuoteMachine extends React.Component {
     axios.get(url).then(res => {
       let quotes = res.data.quotes //array of objects
 
-      this.setState({ allQuotes: quotes}, () => {
-        console.log('all', this.state.allQuotes)
-      })
+      this.setState({ allQuotes: quotes, loading: true})
     })
   }
 
   render() {
-    const { author, quote, genre, allQuotes } = this.state
+    const { author, quote, genre, allQuotes, loading } = this.state
     return (
       <div className="text-center">
         <div className="flex-center">
@@ -77,27 +76,27 @@ class QuoteMachine extends React.Component {
             className="refresh-icon"
           />
         </div>
-        <div className="quote-card">
-          <p>{quote}</p>
-        </div>
+        <p className="quote">{quote}</p>
         <div>
-          <h2
+          <button
+            className="header"
             onClick={this.getAuthorQuotes}
             value={author}
           >
             {author}
-          </h2>
+          </button>
           <p>{genre}</p>
         </div>
         <ul>
+          {loading && <p>{author} quotes:</p>}
           {allQuotes.map((quote, i) => {
             return (
-            <li 
-              className="list"
-              key={i}
-            >
+              <li 
+                className="list"
+                key={i}
+              >
                 {quote.quoteText}
-            </li>
+              </li>
             )
           })}
         </ul>
