@@ -2,26 +2,14 @@ import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
 
-const styles = {
-  card: {
-    backgroundColor: 'white',
-    borderRadius: '4px',
-    width: '300px',
-    height: '500px',
-    textAlign: 'center',
-    padding: '8px'
-  },
-  background: {
-    backgroundColor: 'purple',
-  }
-}
-
 class Quiz extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      country: [],
+      countries: [],
+      capital: '',
+      falseCapital: '',
       loading: true
     }
   }
@@ -37,22 +25,33 @@ class Quiz extends React.Component {
   getCapitals() {
     const url = 'https://restcountries.eu/rest/v2/all'
     axios.get(url).then(res => {
-      const randomCountry = res.data[Math.floor(Math.random() * res.data.length)]
-      console.log('shuffle', randomCountry);
-      this.setState({ country: randomCountry, loading: false}, () => console.log(this.state.country))
+      const shuffled = res.data.sort(() => 0.5 - Math.random());
+      let selected = shuffled.slice(0, 4);
+      this.setState({ countries: selected, loading: false}, () => console.log(this.state.countries))
     })
   }
 
   render() {
-    const { country, loading } = this.state
+    const { countries, loading } = this.state
     return (
       <div className="container">
         <h2>Country Quiz</h2>
-        <div style={styles.card}>
           {!loading && (
-            <h3>{country.capital} is the capital of</h3>
+            <div className="card">
+              <h3>{countries[0].capital} is the capital of</h3>
+              <div>
+                {countries.map((country, index) => {
+                  return (
+                  <p 
+                    key={index}
+                    className="answer-card"
+                  >
+                    {country.name}
+                  </p>
+                )})}
+              </div>
+            </div>
           )}
-        </div>
       </div>
     )
   }
