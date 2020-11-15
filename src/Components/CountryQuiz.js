@@ -8,10 +8,14 @@ class Quiz extends React.Component {
 
     this.state = {
       countries: [],
-      capital: '',
-      falseCapital: '',
-      loading: true
+      loading: true,
+      clicked: false,
+      correctAnswer: false,
+      wrongAnswer: false
     }
+
+    this.handleClick = this.handleClick.bind(this);
+    this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
   }
   
   componentDidMount() {
@@ -26,32 +30,56 @@ class Quiz extends React.Component {
     const url = 'https://restcountries.eu/rest/v2/all'
     axios.get(url).then(res => {
       const shuffled = res.data.sort(() => 0.5 - Math.random());
-      let selected = shuffled.slice(0, 4);
-      this.setState({ countries: selected, loading: false}, () => console.log(this.state.countries))
+      let selectedCountries = shuffled.slice(0, 4);
+      this.setState({ 
+        countries: selectedCountries,
+        loading: false
+      })
     })
   }
 
+  checkCorrectAnswer(country) {
+    console.log(this.state.countries[0].name);
+    if (country === this.state.countries[0].name) {
+      this.setState({ correctAnswer: true })
+    } else {
+      this.setState({ wrongAnswer: true })
+    }
+  }
+
+  handleClick(e) {
+    e.target.style.backgroundColor = 'orange'
+    this.setState({ clicked: true })
+    this.checkCorrectAnswer(e.target.value)
+  }
+
   render() {
-    const { countries, loading } = this.state
+    const { countries, correctAnswer, wrongAnswer, clicked, loading } = this.state
+
     return (
       <div className="container">
         <h2>Country Quiz</h2>
           {!loading && (
             <div className="card">
               <h3>{countries[0].capital} is the capital of</h3>
-              <div>
+              <div className="answer-cards">
                 {countries.map((country, index) => {
                   return (
-                  <p 
+                  <button 
                     key={index}
                     className="answer-card"
+                    onClick={this.handleClick}
+                    value={country.name}
+                    disabled={clicked}
                   >
                     {country.name}
-                  </p>
+                  </button>
                 )})}
               </div>
-            </div>
+            </div>  
           )}
+          {correctAnswer && <button className="btn-large">Correct! Next one</button>}
+          {wrongAnswer && <p>Wrong!</p>}
       </div>
     )
   }
@@ -60,8 +88,10 @@ class Quiz extends React.Component {
 export default Quiz
 
 
-// User story: I can see at least 2 types of question: a city is the capital of.. or a flag belong to country..
-
+// 1. User story: I can see at least 2 types of question: a city is the capital of.. or a flag belong to country..
 // create a card component with h2 element to render the question question
 // api to fetch the capitals
 // api to fetch the flags
+
+//2. User story: I can see select an answer
+//create onClick function to the button
