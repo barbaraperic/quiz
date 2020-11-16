@@ -2,6 +2,47 @@ import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
 
+class Button extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state ={
+      selected: false,
+      active: []
+    }
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  //class={(this.state.selected && (this.state.article === article)) ? 'bkcolor': 'default'}
+
+  handleClick(e) {
+    e.target.style.backgroundColor = 'orange'
+    const index = Number.parseInt(e.target.getAttribute("data-index"))
+    console.log('index', index);
+    this.setState({ active: index, selected: true }, () => console.log(this.state))
+    //this.props.checkCorrectAnswer(this.state.active)
+  }
+
+  render() {
+    return(
+      <div className="answer-cards">
+        {this.props.countries.map((country, index) => {
+          return (
+            <button 
+              key={index}
+              className={`answer-card ${this.state.selected && (this.state.active === index) ? 'btn-success' : null}`}
+              onClick={this.handleClick}
+              value={country.name}
+              data-index={index}
+            >
+              {country.name}
+            </button>
+        )})}
+      </div>
+    )
+  }
+}
+
 class Quiz extends React.Component {
   constructor(props) {
     super(props);
@@ -9,21 +50,14 @@ class Quiz extends React.Component {
     this.state = {
       countries: [],
       loading: true,
-      clicked: false,
-      correctAnswer: false,
-      wrongAnswer: false
+      clickedAnswer: [],
     }
 
-    this.handleClick = this.handleClick.bind(this);
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
   }
   
   componentDidMount() {
     this.getCapitals()
-  }
-
-  randomizeData(array) {
-    return 
   }
   
   getCapitals() {
@@ -38,23 +72,19 @@ class Quiz extends React.Component {
     })
   }
 
-  checkCorrectAnswer(country) {
-    console.log(this.state.countries[0].name);
-    if (country === this.state.countries[0].name) {
-      this.setState({ correctAnswer: true })
+  checkCorrectAnswer(index) {
+    // console.log(this.state.countries[0].name);
+/*     if (this.state.countries[index].name === this.state.countries[0].name) {
+      
     } else {
       this.setState({ wrongAnswer: true })
-    }
+    } */
   }
 
-  handleClick(e) {
-    e.target.style.backgroundColor = 'orange'
-    this.setState({ clicked: true })
-    this.checkCorrectAnswer(e.target.value)
-  }
+
 
   render() {
-    const { countries, correctAnswer, wrongAnswer, clicked, loading } = this.state
+    const { countries, wrongAnswer, loading } = this.state
 
     return (
       <div className="container">
@@ -62,24 +92,10 @@ class Quiz extends React.Component {
           {!loading && (
             <div className="card">
               <h3>{countries[0].capital} is the capital of</h3>
-              <div className="answer-cards">
-                {countries.map((country, index) => {
-                  return (
-                  <button 
-                    key={index}
-                    className="answer-card"
-                    onClick={this.handleClick}
-                    value={country.name}
-                    disabled={clicked}
-                  >
-                    {country.name}
-                  </button>
-                )})}
-              </div>
+              <Button countries={countries} checkCorrectAnswer={this.checkCorrectAnswer}/>
             </div>  
           )}
-          {correctAnswer && <button className="btn-large">Correct! Next one</button>}
-          {wrongAnswer && <p>Wrong!</p>}
+         {wrongAnswer && <p>Wrong!</p>}
       </div>
     )
   }

@@ -30,3 +30,7 @@ html body {
   cursor: pointer;
   background-color: springgreen;
 }
+
+.btn-success {
+  background-color: green;
+}
