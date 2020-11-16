@@ -2,19 +2,6 @@ import React from 'react';
 import axios from 'axios'
 import refreshIcon from '../images/refresh.png'
 import './QuoteMachine.css'
-
-const styles = {
-  card: {
-    backgroundColor: 'whitesmoke',
-    padding: '100px',
-    border: '1px solid rgba(0, 0, 0, 0.4)',
-    maxWidth: '500px',
-    margin: '8px auto'
-  },
-  button: {
-    padding: '8px 16px'
-  }
-}
 class QuoteMachine extends React.Component {
   constructor(props) {
     super(props)

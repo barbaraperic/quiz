@@ -2,45 +2,30 @@ import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
 
-class Button extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state ={
-      selected: false,
-      active: []
-    }
-    this.handleClick = this.handleClick.bind(this);
+const Button = props => {
+  const { countries, checkCorrectAnswer } = props
+  
+  const handleClick = (e) => {
+    const button = e.target
+    checkCorrectAnswer(button)
   }
 
-  //class={(this.state.selected && (this.state.article === article)) ? 'bkcolor': 'default'}
-
-  handleClick(e) {
-    e.target.style.backgroundColor = 'orange'
-    const index = Number.parseInt(e.target.getAttribute("data-index"))
-    console.log('index', index);
-    this.setState({ active: index, selected: true }, () => console.log(this.state))
-    //this.props.checkCorrectAnswer(this.state.active)
-  }
-
-  render() {
-    return(
-      <div className="answer-cards">
-        {this.props.countries.map((country, index) => {
-          return (
-            <button 
-              key={index}
-              className={`answer-card ${this.state.selected && (this.state.active === index) ? 'btn-success' : null}`}
-              onClick={this.handleClick}
-              value={country.name}
-              data-index={index}
-            >
-              {country.name}
-            </button>
+  return (
+    <React.Fragment>
+      {countries.map((country, index) => {
+        return (
+          <button 
+            key={index}
+            data-index={index}
+            className='answer-card'
+            onClick={handleClick}
+            value={country.name}
+          >
+            {country.name}
+          </button>
         )})}
-      </div>
-    )
-  }
+    </React.Fragment>
+  )
 }
 
 class Quiz extends React.Component {
@@ -49,15 +34,24 @@ class Quiz extends React.Component {
 
     this.state = {
       countries: [],
-      loading: true,
-      clickedAnswer: [],
+      capitalName: '',
+      countryName: '',
+      correctAnswer: false,
+      loading: true
     }
 
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
   }
-  
+
   componentDidMount() {
     this.getCapitals()
+  }
+
+  getRandomCapital() {
+    const randomNumber = Math.floor(Math.random() * this.state.countries.length)
+    const capital = this.state.countries[`${randomNumber}`].capital
+    const country = this.state.countries[`${randomNumber}`].name
+    this.setState({ capitalName: capital, countryName: country })
   }
   
   getCapitals() {
@@ -67,35 +61,38 @@ class Quiz extends React.Component {
       let selectedCountries = shuffled.slice(0, 4);
       this.setState({ 
         countries: selectedCountries,
-        loading: false
-      })
+        loading: false,
+      }, () => this.getRandomCapital())
     })
   }
 
-  checkCorrectAnswer(index) {
-    // console.log(this.state.countries[0].name);
-/*     if (this.state.countries[index].name === this.state.countries[0].name) {
-      
+  checkCorrectAnswer(button) {
+    if (button.value === this.state.countryName) {
+      this.setState({ correctAnswer: true })
+      button.style.backgroundColor = 'green'
     } else {
-      this.setState({ wrongAnswer: true })
-    } */
-  }
-
-
+      button.style.backgroundColor = 'orange'
+    }
+}
 
   render() {
-    const { countries, wrongAnswer, loading } = this.state
+    const { countries, capitalName, correctAnswer, loading } = this.state
+
 
     return (
       <div className="container">
         <h2>Country Quiz</h2>
           {!loading && (
             <div className="card">
-              <h3>{countries[0].capital} is the capital of</h3>
-              <Button countries={countries} checkCorrectAnswer={this.checkCorrectAnswer}/>
+              <h3>{capitalName} is the capital of</h3>
+              <div className="answer-cards">
+              <Button 
+                countries={countries} 
+                checkCorrectAnswer={this.checkCorrectAnswer}
+              />
+              </div>
             </div>  
           )}
-         {wrongAnswer && <p>Wrong!</p>}
       </div>
     )
   }
