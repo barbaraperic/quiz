@@ -1,30 +1,20 @@
 import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
+import checkIcon from '../images/check.png'
 
 const Button = props => {
-  const { countries, checkCorrectAnswer } = props
+  const { name, value, onClick, children, className } = props
   
-  const handleClick = (e) => {
-    const button = e.target
-    checkCorrectAnswer(button)
-  }
-
   return (
-    <React.Fragment>
-      {countries.map((country, index) => {
-        return (
-          <button 
-            key={index}
-            data-index={index}
-            className='answer-card'
-            onClick={handleClick}
-            value={country.name}
-          >
-            {country.name}
-          </button>
-        )})}
-    </React.Fragment>
+    <button
+      className={className}
+      onClick={onClick}
+      value={value}
+    >
+      {name}
+      {children}
+    </button>
   )
 }
 
@@ -37,10 +27,12 @@ class Quiz extends React.Component {
       capitalName: '',
       countryName: '',
       correctAnswer: false,
+      answerId: [],
       loading: true
     }
 
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -66,18 +58,23 @@ class Quiz extends React.Component {
     })
   }
 
-  checkCorrectAnswer(button) {
-    if (button.value === this.state.countryName) {
+  checkCorrectAnswer(answer) {
+    console.log('an',answer)
+    if (answer === this.state.countryName) {
       this.setState({ correctAnswer: true })
-      button.style.backgroundColor = 'green'
     } else {
-      button.style.backgroundColor = 'orange'
+      this.setState({ correctAnswer: false })
     }
-}
+  }
+
+  handleClick = (id) => {
+    this.setState({ answerId: id })
+    // const button = e.target
+    this.checkCorrectAnswer(id)
+  }
 
   render() {
-    const { countries, capitalName, correctAnswer, loading } = this.state
-
+    const { countries, capitalName, correctAnswer, answerId, loading } = this.state 
 
     return (
       <div className="container">
@@ -86,10 +83,17 @@ class Quiz extends React.Component {
             <div className="card">
               <h3>{capitalName} is the capital of</h3>
               <div className="answer-cards">
-              <Button 
-                countries={countries} 
-                checkCorrectAnswer={this.checkCorrectAnswer}
-              />
+              {countries.map((country, index) => {
+                return <Button
+                  key={index}
+                  className="answer-card"
+                  value={country.name}
+                  onClick={() => this.handleClick(country.name)}
+                >
+                  {country.name}
+                  {correctAnswer && answerId.includes(country.name) ? <img src={checkIcon} alt="correct"/> : null}
+                </Button>
+              })}
               </div>
             </div>  
           )}
