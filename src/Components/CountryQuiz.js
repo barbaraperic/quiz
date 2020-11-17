@@ -35,6 +35,7 @@ class Quiz extends React.Component {
 
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleNextQuestion = this.handleNextQuestion.bind(this);
   }
 
   componentDidMount() {
@@ -70,9 +71,14 @@ class Quiz extends React.Component {
     }
   }
 
-  handleClick = (id) => {
+  handleClick(id) {
     this.setState({ answerId: id })
     this.checkCorrectAnswer(id)
+  }
+
+  handleNextQuestion() {
+    this.getCapitals()
+    this.setState({ correctAnswer: false })
   }
 
   render() {
@@ -83,6 +89,17 @@ class Quiz extends React.Component {
       wrongAnswer, 
       answerId, 
       loading } = this.state
+    
+    const nextBtn = (
+      <div className="flex-end">
+        <button 
+          className="btn-next" 
+          onClick={this.handleNextQuestion}
+        >
+          Next question
+        </button>
+      </div>
+    )
 
     return (
       <div className="container">
@@ -94,17 +111,19 @@ class Quiz extends React.Component {
               {countries.map((country, index) => {
                 return <Button
                   key={index}
-                  //className={`box ${isBoxVisible ? "" : "hidden"}`}
                   className={`answer-card ${correctAnswer && answerId.includes(country.name) ? 'btn-success' : null}`}
                   value={country.name}
                   onClick={() => this.handleClick(country.name)}
                 >
                   {country.name}
-                  {correctAnswer && answerId.includes(country.name) && <img src={checkIcon} alt="correct"/>}
+                  {correctAnswer && answerId.includes(country.name) && 
+                    <img src={checkIcon} alt="correct"/>
+                  }
                   {wrongAnswer && answerId.includes(country.name) && <img src={errorIcon} alt="correct"/>}
                 </Button>
               })}
               </div>
+              {correctAnswer && nextBtn}
             </div>  
           )}
       </div>
