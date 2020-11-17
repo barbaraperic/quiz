@@ -9,12 +9,14 @@ html body {
 }
 
 .card {
-  background-color: 'white';
-  border-radius: '4px';
-  width: '300px';
-  height: '300px';
-  text-align: 'center';
-  padding: '8px';
+  background-color: white;
+  padding: 24px;
+  border-radius: 10px;
+  height: 325px;
+}
+
+.card h3 {
+  margin: 8px;
 }
 
 .answer-cards {
@@ -22,6 +24,7 @@ html body {
 }
 
 .answer-card {
+  border: 3px solid rgb(141, 138, 138);
   background-color: white;
   border-radius: 6px;
   margin: 8px;

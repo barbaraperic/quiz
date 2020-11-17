@@ -18,7 +18,6 @@ const Button = props => {
     </button>
   )
 }
-
 class Quiz extends React.Component {
   constructor(props) {
     super(props);
@@ -103,10 +102,10 @@ class Quiz extends React.Component {
 
     return (
       <div className="container">
-        <h2>Country Quiz</h2>
+        <h2>COUNTRY QUIZ</h2>
           {!loading && (
             <div className="card">
-              <h3>{capitalName} is the capital of</h3>
+              <h3>{capitalName || 'X'} is the capital of</h3>
               <div className="answer-cards">
               {countries.map((country, index) => {
                 return <Button
