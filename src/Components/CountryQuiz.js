@@ -18,18 +18,29 @@ const Button = props => {
     </button>
   )
 }
+
+const Result = props => {
+  const { result } = props
+
+  return (
+    <div>
+      <h2>Result: {result}</h2>
+    </div>
+  )
+}
 class Quiz extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       countries: [],
+      loading: true,
       capitalName: '',
       countryName: '',
       correctAnswer: false,
       wrongAnswer: false,
       answerId: [],
-      loading: true
+      result: 0
     }
 
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
@@ -62,11 +73,18 @@ class Quiz extends React.Component {
 
   checkCorrectAnswer(answer) {
     if (answer === this.state.countryName) {
-      this.setState({ correctAnswer: true })
-      this.setState({ wrongAnswer: false })
+      this.setState({ 
+        correctAnswer: true, 
+        wrongAnswer: false,
+      })
+      this.setState((state) => ({
+        result: Number.parseInt(state.result) + 1
+      }), () => console.log(this.state.result))
     } else {
-      this.setState({ correctAnswer: false })
-      this.setState({ wrongAnswer: true })
+      this.setState({ 
+        correctAnswer: false, 
+        wrongAnswer: true 
+      })
     }
   }
 
@@ -104,6 +122,7 @@ class Quiz extends React.Component {
       <div className="container">
         <h2>COUNTRY QUIZ</h2>
           {!loading && (
+            <React.Fragment>
             <div className="card">
               <h3>{capitalName || 'X'} is the capital of</h3>
               <div className="answer-cards">
@@ -118,12 +137,16 @@ class Quiz extends React.Component {
                   {correctAnswer && answerId.includes(country.name) && 
                     <img src={checkIcon} alt="correct"/>
                   }
-                  {wrongAnswer && answerId.includes(country.name) && <img src={errorIcon} alt="correct"/>}
+                  {wrongAnswer && answerId.includes(country.name) && 
+                    <img src={errorIcon} alt="correct"/>
+                  }
                 </Button>
               })}
               </div>
               {correctAnswer && nextBtn}
             </div>  
+          <Result result={this.state.result}/>
+          </React.Fragment>
           )}
       </div>
     )
@@ -140,3 +163,9 @@ export default Quiz
 
 //2. User story: I can see select an answer
 //create onClick function to the button
+
+
+//3. User story: When I answer correctly, I can move on to the next question
+
+//4. User story: When I answer incorrectly, I can see my results and try again
+
