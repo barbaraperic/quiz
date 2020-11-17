@@ -133,7 +133,7 @@ class Quiz extends React.Component {
                   value={country.name}
                   onClick={() => this.handleClick(country.name)}
                 >
-                  {country.name}
+                  <p>{country.name}</p>
                   {correctAnswer && answerId.includes(country.name) && 
                     <img src={checkIcon} alt="correct"/>
                   }

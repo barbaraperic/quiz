@@ -15,8 +15,8 @@ html body {
   height: 325px;
 }
 
-.card h3 {
-  margin: 8px;
+.card p {
+  margin: 2px;
 }
 
 .answer-cards {
