@@ -37,3 +37,7 @@ html body {
 .btn-success {
   background-color: green;
 }
+
+.btn-error {
+  background-color: rgba(255, 184, 53, 0.938);
+}

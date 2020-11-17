@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
 import checkIcon from '../images/check.png'
+import errorIcon from '../images/error.png'
 
 const Button = props => {
   const { name, value, onClick, children, className } = props
@@ -27,6 +28,7 @@ class Quiz extends React.Component {
       capitalName: '',
       countryName: '',
       correctAnswer: false,
+      wrongAnswer: false,
       answerId: [],
       loading: true
     }
@@ -59,22 +61,28 @@ class Quiz extends React.Component {
   }
 
   checkCorrectAnswer(answer) {
-    console.log('an',answer)
     if (answer === this.state.countryName) {
       this.setState({ correctAnswer: true })
+      this.setState({ wrongAnswer: false })
     } else {
       this.setState({ correctAnswer: false })
+      this.setState({ wrongAnswer: true })
     }
   }
 
   handleClick = (id) => {
     this.setState({ answerId: id })
-    // const button = e.target
     this.checkCorrectAnswer(id)
   }
 
   render() {
-    const { countries, capitalName, correctAnswer, answerId, loading } = this.state 
+    const { 
+      countries, 
+      capitalName, 
+      correctAnswer, 
+      wrongAnswer, 
+      answerId, 
+      loading } = this.state
 
     return (
       <div className="container">
@@ -86,12 +94,14 @@ class Quiz extends React.Component {
               {countries.map((country, index) => {
                 return <Button
                   key={index}
-                  className="answer-card"
+                  //className={`box ${isBoxVisible ? "" : "hidden"}`}
+                  className={`answer-card ${correctAnswer && answerId.includes(country.name) ? 'btn-success' : null}`}
                   value={country.name}
                   onClick={() => this.handleClick(country.name)}
                 >
                   {country.name}
-                  {correctAnswer && answerId.includes(country.name) ? <img src={checkIcon} alt="correct"/> : null}
+                  {correctAnswer && answerId.includes(country.name) && <img src={checkIcon} alt="correct"/>}
+                  {wrongAnswer && answerId.includes(country.name) && <img src={errorIcon} alt="correct"/>}
                 </Button>
               })}
               </div>
