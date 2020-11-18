@@ -92,7 +92,7 @@ class Quiz extends React.Component {
       })
       this.setState((state) => ({
         result: Number.parseInt(state.result) + 1
-      }), () => console.log(this.state))
+      }))
     } else {
       this.setState({ 
         correctAnswer: false, 
@@ -176,7 +176,7 @@ class Quiz extends React.Component {
 export default Quiz
 
 
-// 1. User story: I can see at least 2 types of question: a city is the capital of.. or a flag belong to country..
+//1. User story: I can see at least 2 types of question: a city is the capital of.. or a flag belong to country..
 
 //2. User story: I can see select an answer
 
