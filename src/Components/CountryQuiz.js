@@ -4,17 +4,31 @@ import './CountryQuiz.css'
 import checkIcon from '../images/check.png'
 import errorIcon from '../images/error.png'
 
-const Button = props => {
-  const { name, value, onClick, children, className } = props
+const Input = props => {
+  const { name, value, onClick, children, className, disabled } = props
   
   return (
     <button
       className={className}
       onClick={onClick}
       value={value}
+      disabled={disabled}
     >
       {name}
       {children}
+    </button>
+  )
+}
+
+const Button = props => {
+  const { text, className, handleClick } = props
+
+  return (
+    <button 
+      className={className} 
+      onClick={handleClick}
+    >
+      {text}
     </button>
   )
 }
@@ -23,9 +37,7 @@ const Result = props => {
   const { result } = props
 
   return (
-    <div>
-      <h2>Result: {result}</h2>
-    </div>
+    <h3>RESULT: {result}</h3>
   )
 }
 class Quiz extends React.Component {
@@ -46,6 +58,7 @@ class Quiz extends React.Component {
     this.checkCorrectAnswer = this.checkCorrectAnswer.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleNextQuestion = this.handleNextQuestion.bind(this);
+    this.newGame = this.newGame.bind(this);
   }
 
   componentDidMount() {
@@ -79,11 +92,11 @@ class Quiz extends React.Component {
       })
       this.setState((state) => ({
         result: Number.parseInt(state.result) + 1
-      }), () => console.log(this.state.result))
+      }), () => console.log(this.state))
     } else {
       this.setState({ 
         correctAnswer: false, 
-        wrongAnswer: true 
+        wrongAnswer: true,
       })
     }
   }
@@ -95,7 +108,12 @@ class Quiz extends React.Component {
 
   handleNextQuestion() {
     this.getCapitals()
-    this.setState({ correctAnswer: false })
+    this.setState({ correctAnswer: false, wrongAnswer: false })
+  }
+
+  newGame() {
+    this.getCapitals()
+    this.setState({ correctAnswer: false, wrongAnswer: false, result: 0 })
   }
 
   render() {
@@ -106,17 +124,6 @@ class Quiz extends React.Component {
       wrongAnswer, 
       answerId, 
       loading } = this.state
-    
-    const nextBtn = (
-      <div className="flex-end">
-        <button 
-          className="btn-next" 
-          onClick={this.handleNextQuestion}
-        >
-          Next question
-        </button>
-      </div>
-    )
 
     return (
       <div className="container">
@@ -127,11 +134,12 @@ class Quiz extends React.Component {
               <h3>{capitalName || 'X'} is the capital of</h3>
               <div className="answer-cards">
               {countries.map((country, index) => {
-                return <Button
+                return <Input
                   key={index}
                   className={`answer-card ${correctAnswer && answerId.includes(country.name) ? 'btn-success' : null}`}
                   value={country.name}
                   onClick={() => this.handleClick(country.name)}
+                  disabled={wrongAnswer}
                 >
                   <p>{country.name}</p>
                   {correctAnswer && answerId.includes(country.name) && 
@@ -140,12 +148,24 @@ class Quiz extends React.Component {
                   {wrongAnswer && answerId.includes(country.name) && 
                     <img src={errorIcon} alt="correct"/>
                   }
-                </Button>
+                </Input>
               })}
               </div>
-              {correctAnswer && nextBtn}
-            </div>  
-          <Result result={this.state.result}/>
+              {correctAnswer && 
+                <Button 
+                  text="Next Question" 
+                  className="btn-next"
+                  handleClick={this.handleNextQuestion}
+                />}
+            </div>
+            {wrongAnswer && <Result result={this.state.result}/>}
+            {wrongAnswer && 
+              <Button 
+                text="Try Again"
+                className="btn-next"
+                handleClick={this.newGame}
+              />
+            }
           </React.Fragment>
           )}
       </div>
@@ -157,13 +177,8 @@ export default Quiz
 
 
 // 1. User story: I can see at least 2 types of question: a city is the capital of.. or a flag belong to country..
-// create a card component with h2 element to render the question question
-// api to fetch the capitals
-// api to fetch the flags
 
 //2. User story: I can see select an answer
-//create onClick function to the button
-
 
 //3. User story: When I answer correctly, I can move on to the next question
 
