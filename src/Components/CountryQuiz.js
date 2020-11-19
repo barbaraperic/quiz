@@ -1,24 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import './CountryQuiz.css'
+import Input from './Input'
 import checkIcon from '../images/check.png'
 import errorIcon from '../images/error.png'
-
-const Input = props => {
-  const { name, value, onClick, children, className, disabled } = props
-  
-  return (
-    <button
-      className={className}
-      onClick={onClick}
-      value={value}
-      disabled={disabled}
-    >
-      {name}
-      {children}
-    </button>
-  )
-}
 
 const Button = props => {
   const { text, className, handleClick } = props
